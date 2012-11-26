@@ -1,0 +1,9 @@
+f95c93adb4140e30c644aa775337edcf *DESCRIPTION
+9b7304e094624afe6d669ab4984ef62d *NAMESPACE
+97880b63a8963a32d5248b7a87eba1a5 *R/threg.R
+cac61227c93c0d1a6b07672804b15ce8 *data/bmt.RData
+348550d8ba12fac84c6c223cf7194c91 *data/lkr.RData
+26c4865b2360a83e8a8bd24e3c181b49 *inst/doc/threg.pdf
+701c40739a79b2b233a23a66c03d4a83 *man/bmt.Rd
+02ee151f08b739fb9e90ba827bc536fb *man/lkr.Rd
+62a99f4671bfaf354c14b2028eb02bbd *man/threg.Rd
