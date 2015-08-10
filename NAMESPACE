@@ -1,11 +1,16 @@
-# Default NAMESPACE created by R
-# Remove the previous line if you edit this file
-
-# Export all names
-exportPattern(".")
-
-# Import all packages listed as Imports or Depends
 import(
   survival,
   Formula
 )
+
+importFrom("graphics", "legend", "matplot")
+importFrom("stats", "formula", "model.extract", "model.matrix", "nlm",
+             "pchisq", "pnorm", "terms")
+
+exportPattern(hr, threg)
+
+S3method(hr, threg)
+S3method(print, threg)
+S3method(plot, threg)
+S3method(predict, threg)
+

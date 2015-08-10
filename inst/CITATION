@@ -1,0 +1,22 @@
+citHeader("To cite threg in publications use:")
+
+citEntry(entry = "Article",
+  title        = "The {R} Package {threg} to Implement Threshold Regression Models",
+  author       = personList(as.person("Tao Xiao"),
+                   as.person("G. A. Whitmore"),
+                   as.person("Xin He"),
+                   as.person("Mei-Ling Ting Lee")),
+  journal      = "Journal of Statistical Software",
+  year         = "2015",
+  volume       = "66",
+  number       = "8",
+  pages        = "1--16",
+  url          = "http://www.jstatsoft.org/v66/i08/",
+
+  textVersion  =
+  paste("Tao Xiao, G. A. Whitmore, Xin He, Mei-Ling Ting Lee (2015).",
+        "The R Package threg to Implement Threshold Regression Models.",
+        "Journal of Statistical Software, 66(8), 1-16.",
+        "URL http://www.jstatsoft.org/v66/i08/.")
+)
+

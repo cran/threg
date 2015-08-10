@@ -2,23 +2,15 @@
 \alias{threg}
 \title{fit a threshold regression model}
 \description{
- This function can be used to fit a threshold regressio model based on the first-hitting-time of a boundary by the sample path of a Wiener diffusion process. It uses maximum likelihood estimation method for calculating regression coefficient estimates, asymptotic standard errors and p-values. The outputs can also provide the estimates of hazard ratios at selected time
-points for specified scenarios (based on given categories or value settings of covariates) and the plots for curves of estimated hazard functions, survival functions
-and probability density functions of the first-hitting-time.
+ This function can be used to fit a threshold regressio model based on the first-hitting-time of a boundary by the sample path of a Wiener diffusion process. It uses maximum likelihood estimation method for calculating regression coefficient estimates, asymptotic standard errors and p-values.
  }
 \usage{
-threg(formula, data, hr, timevalue, scenario, graph, nolegend=0, nocolor=0)
+threg(formula, data)
 }
 
 \arguments{
   \item{formula}{a formula object, with the response on the left of a ~ operator, and the independent variables on the right. The response must be a survival object as returned by the Surv function. On the right of the ~ operator, a | operator must be used: on the left of the | operator, users specify independent variables that will be used in the linear regression function for \eqn{\ln{y_0}} in the threshold regression model; on the right of the | operator, users specify independent variables that will be used in the linear regression function for \eqn{\mu} in the threshold regression model. If users just want to use a constant \eqn{\ln{y_0}} or \eqn{\mu}, he or she can put 0 or 1 as a placeholder on the left or right of the | operator, instead of listing the independent variables for \eqn{\ln{y_0}} or \eqn{\mu}.}
   \item{data}{input dataset. Such dataset must be a survival dataset including at least the survival time variable and censoring variable. For the censoring variable, 1 should be used to indicate the subjects with failure observed, and 0 should be used to indicate the subjects that are right censored. The dataset can also include other independent variables that will be used in the threshold regression model.}
-  \item{hr}{specifies the categorical variable for the calculation of hazard ratios. Such categorical variable must be a factor variable.}
-  \item{scenario}{specifies a scenario where the hazard ratios are calculated.}
-  \item{timevalue}{specifies a value of time at which the hazard ratios are calculated.}
-  \item{graph}{specifies the type of curves to be generated. The ``hz'' option is to plot hazard function curves, the ``sv'' option is to plot survival function curves, and the ``ds'' option is to plot density function curves.}
-  \item{nolegend}{set the ``nolegend'' argument to 1 if users do not want the ``threg'' package to generate legends for the picture. Note that even if ``nolegend'' is set to 1, users can still generate legends by themselves after the picture is generated, by using the ``legend'' function in R.}
-  \item{nocolor}{set the ``nocolor'' argument to 1 if users want to depict all curves in black.}
 }
 \details{
 Threshold regression is a recently developed regression methodology to analyze time to event data. For a review of this regression model, see Lee and Whitmore (2006, 2010). A unique feature of threshold regression is that the event time is considered as the time when an underlying stochastic process first hits a boundary threshold. In the context of survival data, for example, the event can be death. The death time of an individual is considered as the time when his/her latent health status  decreases to the zero boundary.
@@ -71,11 +63,12 @@ Garrett, J. M. (1997)
 models with effect modification. \emph{Stata Technical Bulletin}, 36, 1522. Reprinted in \emph{Stata
 Technical Bulletin Reprints}, vol. 6, pp. 104-114. College Station, TX: Stata Press.
 
-
-
-
+Xiao, T., Whitmore, G. A., He, Xin, Lee, M-L. T. (2015)
+ The R Package threg to Implement Threshold Regression Models. \emph{Journal of Statistical Software}, 66(8), 1-16. URL http://www.jstatsoft.org/v66/i08/.
 
 }
+
+
 \examples{
 #load the data "lkr"
 data("lkr")
@@ -84,27 +77,8 @@ data("lkr")
 lkr$f.treatment2=factor(lkr$treatment2)
 
 #fit the threshold regression model on the factor variable "f.treatment2", 
-#calculate the hazard ratio of the drug B group v.s. the standard group at 
-#week 20 (this hazard ratio is calculated as 0.12), 
-#and generate the predicted survival curves for the drug B group and 
-#the standard group.
-threg(Surv(weeks, relapse)~ f.treatment2|f.treatment2,data = lkr,
-      hr=f.treatment2,timevalue=20,graph=sv,
-      nolegend=1,nocolor=1)
-legend(20, 1, c("Standard","Drug B"), lty = 1:2) 
-
-#fit the threshold regression model on the factor variable "f.treatment2", 
-#and calculate the hazard ratio of the drug B group v.s. the standard group at 
-#week 5 (this hazard ratio is calculated as 2.08).
-threg(Surv(weeks, relapse)~ f.treatment2|f.treatment2,data = lkr,
-      hr=f.treatment2,timevalue=5)
-
-
-
-#As a comparison, fit the Cox proportion hazards model on "f.treatment2", 
-#and the Cox model gives a constant hazard ratio, 0.73.
-summary(coxph(Surv(weeks, relapse) ~ f.treatment2, data = lkr))
-
+fit<-threg(Surv(weeks, relapse)~ f.treatment2|f.treatment2,data = lkr)
+fit
 
 #load the data "bmt"
 data("bmt")
@@ -116,31 +90,8 @@ bmt$f.fab=factor(bmt$fab)
 
 #fit a threshold regression model on the "bmt" dataset, by using "recipient_age" and 
 #"f.fab" as the predictors for ln(y0), and "f.group" and "f.fab" as predictors for mu.
-threg(Surv(time, indicator)~ recipient_age+f.fab|f.group+f.fab, data = bmt)
-
-#fit the same model as above, but additionally calculate the hazard ratio for 
-#"f.group" for the specified scenario that "the patient age is 18 years old and 
-#the FAB classification is 0", at the time ``500 days''.
-threg(Surv(time, indicator)~ recipient_age+f.fab|f.group+f.fab, data = bmt,
-hr=f.group,timevalue=500,scenario=recipient_age(18)+f.fab(0))
-
-
-
-#fit the same model as above, but additionally overlay curves of survival functions 
-#corresponding to different levels of "f.group'.
-threg(Surv(time, indicator)~ recipient_age+f.fab|f.group+f.fab, data = bmt,
-hr=f.group,timevalue=500,scenario=recipient_age(18)+f.fab(0),graph=sv,nocolor=1)
-
-
-#fit the same model as above, but additionally overlay curves of hazard functions 
-#corresponding to different levels of "f.group'.
-threg(Surv(time, indicator)~ recipient_age+f.fab|f.group+f.fab, data = bmt,
-hr=f.group,timevalue=500,scenario=recipient_age(18)+f.fab(0),graph=hz,nocolor=1)
-
-#fit the same model as above, but additionally overlay curves of probability density 
-#functions corresponding to different levels of "f.group'.
-threg(Surv(time, indicator)~ recipient_age+f.fab|f.group+f.fab, data = bmt,
-hr=f.group,timevalue=500,scenario=recipient_age(18)+f.fab(0),graph=ds,nocolor=1)
+fit<-threg(Surv(time, indicator)~ recipient_age+f.fab|f.group+f.fab, data = bmt)
+fit
 
 }
 
